@@ -1,2 +1,2 @@
-# music-muuse
-A re-imagining of Laurie Speigel's 80's soft
+# Piano Roll for Renoise
+It lacks one, not that it particularly bothers me.
