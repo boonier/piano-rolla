@@ -1,0 +1,23 @@
+body {
+	padding: 0; 
+	margin: 0;
+	background: #fff;
+	overflow: hidden;
+	font-family: Helvetica, Arial;
+}
+h1 {
+	font-size: 1.5rem;
+}
+
+#timeline {
+	display: flex;
+}
+
+#scale {
+	width: 100px;
+}
+
+#grid {
+	flex: 4;
+	overflow: scroll;
+}
