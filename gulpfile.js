@@ -20,7 +20,9 @@ gulp.task('serve', function () {
         server: {
             baseDir: "./"
         },
-        files: "./assets" 
+        files: "./assets",
+        port: 3002,
+        open: false
     });
 
 });
