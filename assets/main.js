@@ -1,7 +1,7 @@
 var noteScale = [0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0];
 var numOctaves = 7;
 var notesPerOctave = 12;
-var noteHeight = 12;
+var noteHeight = 14;
 var totalNotes = numOctaves * notesPerOctave;
 
 var h = noteHeight * (numOctaves * notesPerOctave);
@@ -14,11 +14,18 @@ document.addEventListener('DOMContentLoaded', function(event) {
     });
 });
 
+var oscPort = new osc.WebSocketPort({
+    url: "ws://localhost:8081" // URL to your Web Socket server.
+});
+
+oscPort.open();
+
 var scale = function( p ) {
 
     p.setup = function() {
 
         p.createCanvas(100, h);
+
         for (var i = 0; i < totalNotes; i++) {
             var ww = 0;
             if (noteScale[i % notesPerOctave] == 0) {
@@ -26,7 +33,7 @@ var scale = function( p ) {
                 ww = p.width;
             } else {
                 p.fill(60);
-                ww = p.width - 30;
+                ww = p.width;
             }
             p.stroke(220);
             p.rect(0, (h-noteHeight) - (noteHeight * i), ww, noteHeight);
