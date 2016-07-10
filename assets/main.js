@@ -1,12 +1,16 @@
-var noteScale = [0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0];
+// var noteScale = [0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0];
+
+var noteScale = ['C', 'C#', 'D', 'E#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+
 var numOctaves = 7;
 var notesPerOctave = 12;
-var noteHeight = 14;
+var noteHeight = 16;
 var totalNotes = numOctaves * notesPerOctave;
 
 var h = noteHeight * (numOctaves * notesPerOctave);
 var w = 2000;
 
+////// DOM setup stuff
 document.addEventListener('DOMContentLoaded', function(event) {
     var els = document.querySelectorAll('#scale, #grid');
     els.forEach(function(el){
@@ -14,46 +18,55 @@ document.addEventListener('DOMContentLoaded', function(event) {
     });
 });
 
-var oscPort = new osc.WebSocketPort({
-    url: "ws://localhost:8081" // URL to your Web Socket server.
-});
 
-oscPort.open();
+//  Websocket stuff
+// var oscPort = new osc.WebSocketPort({
+//     url: "ws://localhost:8081" // URL to your Web Socket server.
+// });
+// oscPort.open();
 
+
+///////// Processing stuff
 var scale = function( p ) {
 
     p.setup = function() {
 
         p.createCanvas(100, h);
-
+        
         for (var i = 0; i < totalNotes; i++) {
-            var ww = 0;
-            if (noteScale[i % notesPerOctave] == 0) {
-                p.fill(255);
-                ww = p.width;
-            } else {
+            var ww = p.width;
+            if (noteScale[i % notesPerOctave].indexOf('#') > 0) {
                 p.fill(60);
-                ww = p.width;
+            } else {
+                p.fill(255);
             }
+            
             p.stroke(220);
             p.rect(0, (h-noteHeight) - (noteHeight * i), ww, noteHeight);
         }
 
+        p.noStroke();
+        p.textSize(9);
         var octNum = 0;
         var octInt = 0;
-
-        for (var i = 0; i < totalNotes; i++) {            
-            if ( i % notesPerOctave === 0) {
-                octInt = i;
-                p.fill(0);
-                p.noStroke();
-                p.textSize(9);
-                console.log(i);
-                p.text('C' + octNum, 77, p.int(h-(noteHeight * octInt) - (noteHeight)/5));    
-                octNum++;
+        
+        for (var i = 0; i < numOctaves; i++) { 
+        
+            for (var j = 0; j < notesPerOctave; j++) {
+                var note = noteScale[j];
+                (note.indexOf('#') === -1) ? p.fill(0) : p.fill(255); //color
+                p.text(
+                    note + octNum, 
+                    77,
+                    p.text(
+                        note + octNum,
+                        77, 
+                        p.int( h - (noteHeight * j) - (noteHeight/5) - (notesPerOctave * noteHeight) * octNum) // pos - correction - offset
+                    )
+                );
             }
+            octNum++;
         }
-
     };
 
     p.draw = function() {};
